@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"os"
 
-	"github.com/gogolok/finance-gogo/pkg/sheet"
+	"github.com/gogolok/finance-gogo/cmd"
 )
 
 func main() {
-	fmt.Println(sheet.Data())
+	if err := cmd.RootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
