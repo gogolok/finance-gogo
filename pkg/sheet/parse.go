@@ -1,23 +1,26 @@
 package sheet
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 )
 
-func parseAll(d []SourceRawData) error {
+func parseAll(d []SourceRawData) ([]Sheet, error) {
+	sheets := []Sheet{}
+
 	for _, entry := range d {
-		err := parse(entry)
+		sheet, err := parse(entry)
 		if err != nil {
-			return err
+			return sheets, err
 		}
+		sheets = append(sheets, *sheet)
 	}
-	return nil
+
+	return sheets, nil
 }
 
-func parse(d SourceRawData) error {
-	sheet := Sheet{
+func parse(d SourceRawData) (*Sheet, error) {
+	sheet := &Sheet{
 		Name:    d.Name,
 		Entries: []Entry{},
 	}
@@ -33,13 +36,13 @@ func parse(d SourceRawData) error {
 		const shortForm = "02.01.2006"
 		date, err := time.Parse(shortForm, record[1])
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		// Paid
 		paid, err := strconv.ParseFloat(record[2], 10)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		// Costs
@@ -48,28 +51,28 @@ func parse(d SourceRawData) error {
 		}
 		provision, err := strconv.ParseFloat(record[3], 10)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		if record[4] == "" {
 			record[4] = "0.00"
 		}
 		clearstream, err := strconv.ParseFloat(record[4], 10)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		if record[5] == "" {
 			record[5] = "0.00"
 		}
 		market, err := strconv.ParseFloat(record[5], 10)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		costs := provision + clearstream + market
 
 		// Amount
 		amount, err := strconv.ParseFloat(record[7], 10)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		entry := Entry{
@@ -80,9 +83,8 @@ func parse(d SourceRawData) error {
 			Costs:  costs,
 			Amount: amount,
 		}
-		fmt.Printf("entry = %v\n", entry)
 		sheet.Entries = append(sheet.Entries, entry)
 	}
 
-	return nil
+	return sheet, nil
 }
