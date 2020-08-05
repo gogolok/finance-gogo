@@ -9,8 +9,8 @@ import (
 func newCmdGroup() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "group",
-		Short: "Fetches and groups ETF transactions",
-		Long:  `Fetches and groups ETF transactions.`,
+		Short: "Fetch and group ETF transactions",
+		Long:  `Fetch and group ETF transactions.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return sheet.GroupDataAndOutput()
 		},
