@@ -6,13 +6,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newCmdFetch() *cobra.Command {
+func newCmdGroup() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "fetch",
-		Short: "Download ETF transactions",
-		Long:  `Download ETF transactions.`,
+		Use:   "group",
+		Short: "Fetches and groups ETF transactions",
+		Long:  `Fetches and groups ETF transactions.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return sheet.FetchDataAndOutput()
+			return sheet.GroupDataAndOutput()
 		},
 	}
 

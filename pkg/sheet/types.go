@@ -31,3 +31,14 @@ type Sheet struct {
 	Name    string
 	Entries []Entry
 }
+
+type WKNSumEntry struct {
+	Paid   float64
+	Costs  float64
+	Amount float64
+}
+
+type GroupEntry struct {
+	Name    string
+	Entries map[string]WKNSumEntry
+}
